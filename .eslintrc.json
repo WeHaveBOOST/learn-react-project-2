@@ -27,7 +27,8 @@
           "unnamedComponents": "arrow-function"
         }
       ],
+      "react/react-in-jsx-scope": 0,
       "no-underscore-dangle": 0,
-      "react/react-in-jsx-scope": 0
+      "import/no-extraneous-dependencies": 0
     }
 }

@@ -27,7 +27,7 @@ if (isDevMode) {
 
 const config = () => ({
   mode: process.env.webpackMode,
-  entry: './index.jsx',
+  entry: './src/index.jsx',
   output: {
     path: path.resolve(__dirname, './public/'),
     filename: '[name].bundle.js',
@@ -69,6 +69,10 @@ const config = () => ({
     ],
   },
   plugins: pluginsRes,
+  externals: [
+    'express',
+    'dotenv'
+  ],
 });
 
 export default config;
