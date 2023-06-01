@@ -1,8 +1,9 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
+import DotenvWebpackPlugin from 'dotenv-webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import DotenvWebpackPlugin from 'dotenv-webpack';
+import FaviconsWebpackPlugin from 'favicons-webpack-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,20 +12,22 @@ const isDevMode = process.env.webpackMode === 'development';
 const pluginsRes = [];
 if (isDevMode) {
   pluginsRes.push(
+    new DotenvWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/html/template.html',
       inject: true,
     }),
-    new DotenvWebpackPlugin(),
+    new FaviconsWebpackPlugin('src/resources/img/abyss.jpg'),
   );
 } else {
   pluginsRes.push(
+    new DotenvWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/html/template.html',
       inject: true,
     }),
     new MiniCssExtractPlugin(),
-    new DotenvWebpackPlugin(),
+    new FaviconsWebpackPlugin('src/resources/img/abyss.jpg'),
   );
 }
 

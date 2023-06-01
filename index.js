@@ -4,6 +4,8 @@ import * as dotenv from 'dotenv';
 import axios from 'axios';
 import hash from 'blueimp-md5';
 
+import prepareData from './src/services/MarvelService.js';
+
 dotenv.config();
 
 const PORT = 8000;
@@ -37,7 +39,7 @@ app.get('/getAllCharacters', (req, res) => {
   }
 
   axios.request(options)
-    .then(response => res.json(response.data))
+    .then(response => res.json(response.data.data.results.map(prepareData)))
     .catch(err => {
       console.error(err);
     })
@@ -55,7 +57,7 @@ app.get('/getCharacter', (req, res) => {
   }
 
   axios.request(options)
-    .then(response => res.json(response.data))
+    .then(response => res.json(prepareData(response.data.data.results[0])))
     .catch(err => {
       console.error(err);
     })
