@@ -1,57 +1,77 @@
 import { Component } from 'react';
+import Spinner from '../spinner/Spinner';
 
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
 class RandomChar extends Component {
   state = {
-    name: null,
-    description: null,
-    thumbnail: null,
-    homepage: null,
-    wiki: null,
+    char: {},
+    loading: true,
   }
 
   componentDidMount() {
     this.updateChar();
   }
 
+  onCharLoaded = (char) => {
+    this.setState({
+      char,
+      loading: false,
+    })
+  }
+
   updateChar = () => {
-    const id = 1011196;
+    const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
 
     fetch(`${process.env.SERVER_BASE}getCharacter/?id=${id}`)
       .then(result => result.json())
-      .then(obj => {
-        const { name, description, thumbnail, urls } = obj.data.results[0];
-
-        this.setState({
-          name,
-          description,
-          thumbnail: `${thumbnail.path}.${thumbnail.extension}`,
-          homepage: urls[0].url,
-          wiki: urls[1].url,
-        });
-      })
+      .then(this.onCharLoaded)
       .catch(err => {
-        console.error(err);
+        console.error(err)
       })
   }
 
   render() {
-    const { name, description, thumbnail, homepage, wiki } = this.state;
+    const {
+      char: {
+        name,
+        description,
+        thumbnail,
+        homepage,
+        wiki
+      },
+      loading,
+    } = this.state;
+
+    if (loading) return <Spinner/>;
 
     return (
       <div className="randomchar">
           <div className="randomchar__block">
-              <img src={thumbnail} alt="Random character" className="randomchar__img"/>
+              <img
+                className="randomchar__img"
+                src={thumbnail}
+                alt="Random character"
+              />
               <div className="randomchar__info">
                   <p className="randomchar__name">{name}</p>
-                  <p className="randomchar__descr">{description}</p>
+                  <div className="randomchar__descr"><p>{description || 'Description not found'}</p></div>
                   <div className="randomchar__btns">
-                      <a href={homepage} className="button button__main">
+                      <a
+                        className="button button__main"
+                        href={homepage}
+                        rel='noreferrer'
+                        target='_blank'
+                      >
                           <div className="inner">homepage</div>
                       </a>
-                      <a href={wiki} className="button button__secondary">
+                      <a
+                        className="button button__secondary"
+                        href={wiki}
+                        rel='noreferrer'
+                        target='_blank'
+                      >
                           <div className="inner">Wiki</div>
                       </a>
                   </div>
