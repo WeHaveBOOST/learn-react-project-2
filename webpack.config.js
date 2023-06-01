@@ -2,6 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import DotenvWebpackPlugin from 'dotenv-webpack';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,6 +15,7 @@ if (isDevMode) {
       template: 'src/html/template.html',
       inject: true,
     }),
+    new DotenvWebpackPlugin(),
   );
 } else {
   pluginsRes.push(
@@ -22,6 +24,7 @@ if (isDevMode) {
       inject: true,
     }),
     new MiniCssExtractPlugin(),
+    new DotenvWebpackPlugin(),
   );
 }
 
