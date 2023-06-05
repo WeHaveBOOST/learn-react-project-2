@@ -7,6 +7,8 @@ import ComicsList from './comicsList/ComicsList'
 import RandomChar from './randomChar/RandomChar';
 import SingleComic from './singleComic/SingleComic';
 import Skeleton from './skeleton/Skeleton';
+import Spinner from './spinner/Spinner';
+import ErrorMessage from './errorMessage/ErrorMessage';
 
 export {
   App,
@@ -18,4 +20,6 @@ export {
   RandomChar,
   SingleComic,
   Skeleton,
+  Spinner,
+  ErrorMessage,
 }

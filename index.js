@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
   res.json('hi');
 });
 
-app.get('/getAllCharacters', (req, res) => {
+app.get('/getAllCharacters', (req, res, next) => {
   const parameters = [
     'limit=9&',
     'offset=210&',
@@ -42,10 +42,11 @@ app.get('/getAllCharacters', (req, res) => {
     .then(response => res.json(response.data.data.results.map(prepareData)))
     .catch(err => {
       console.error(err);
+      next(err);
     })
 });
 
-app.get('/getCharacter', (req, res) => {
+app.get('/getCharacter', (req, res, next) => {
   const {id} = req.query;
   const parameters = [
     ...defaultParameters
@@ -60,6 +61,7 @@ app.get('/getCharacter', (req, res) => {
     .then(response => res.json(prepareData(response.data.data.results[0])))
     .catch(err => {
       console.error(err);
+      next(err);
     })
 });
 
