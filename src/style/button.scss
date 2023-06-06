@@ -11,6 +11,11 @@
   background-color: transparent;
   cursor: pointer;
 
+  &:disabled {
+    cursor: default;
+    opacity: 0.75;
+  }
+
   &__long {
     display: block;
     width: 170px;

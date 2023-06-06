@@ -75,10 +75,6 @@ const config = () => ({
     ],
   },
   plugins: pluginsRes,
-  externals: [
-    'express',
-    'dotenv'
-  ],
 });
 
 export default config;

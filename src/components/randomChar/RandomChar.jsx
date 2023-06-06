@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import classNames from 'classnames';
 import {
   Spinner,
   ErrorMessage,
@@ -16,9 +17,19 @@ class RandomChar extends Component {
 
   componentDidMount() {
     this.updateChar();
+    console.log('Mount');
   }
 
   updateChar = () => {
+    const {loading} = this.state;
+
+    if (!loading) {
+      this.setState({
+        loading: true,
+        error: false
+      })
+    }
+
     const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
 
     fetch(`${process.env.SERVER_BASE}getCharacter/?id=${id}`)
@@ -31,10 +42,12 @@ class RandomChar extends Component {
     this.setState({
       char,
       loading: false,
+      error: false,
     })
   }
 
   onError = (err) => {
+    console.error(err);
     this.setState({
       loading: false,
       error: true,
@@ -42,6 +55,8 @@ class RandomChar extends Component {
   }
 
   render() {
+    console.log('render');
+
     const {
       char,
       loading,
@@ -70,6 +85,7 @@ class RandomChar extends Component {
                 className="button button__main"
                 type='button'
                 onClick={this.updateChar}
+                disabled={loading}
               >
                 <div className="inner">try it</div>
               </button>
@@ -89,10 +105,15 @@ const View = ({char}) => {
     wiki,
   } = char;
 
+  const imgClassName = classNames(
+    'randomchar__img',
+    {'not-available': thumbnail.search(/image_not_available/) > 0}
+  )
+
   return (
     <div className="randomchar__block">
       <img
-        className="randomchar__img"
+        className={imgClassName}
         src={thumbnail}
         alt="Random character"
       />
