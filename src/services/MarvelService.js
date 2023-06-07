@@ -1,5 +1,6 @@
 function transformCharacter (obj) {
   const {
+    id,
     name,
     description,
     thumbnail,
@@ -7,6 +8,7 @@ function transformCharacter (obj) {
   } = obj;
 
   return {
+    id,
     name,
     description,
     thumbnail: `${thumbnail.path}.${thumbnail.extension}`,

@@ -17,7 +17,6 @@ class RandomChar extends Component {
 
   componentDidMount() {
     this.updateChar();
-    console.log('Mount');
   }
 
   updateChar = () => {
@@ -47,7 +46,6 @@ class RandomChar extends Component {
   }
 
   onError = (err) => {
-    console.error(err);
     this.setState({
       loading: false,
       error: true,
@@ -55,8 +53,6 @@ class RandomChar extends Component {
   }
 
   render() {
-    console.log('render');
-
     const {
       char,
       loading,
