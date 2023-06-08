@@ -55,10 +55,11 @@ class CharList extends Component {
       loading,
       error,
     } = this.state;
+    const {onCharSelected} = this.props;
 
     const spinner = loading ? <Spinner/> : null;
     const errorMessage = error ? <ErrorMessage/> : null;
-    const content = !(error || loading) ? <View chars={chars} /> : null;
+    const content = !(error || loading) ? <View chars={chars} onCharSelected={onCharSelected} /> : null;
 
     return (
       <div className="char__list">
@@ -77,16 +78,25 @@ class CharList extends Component {
   }
 }
 
-const View = ({chars}) => (
+const View = ({chars, onCharSelected}) => (
   <ul className="char__grid">
-    {chars.map(({id, name, thumbnail}) => {
+    {chars.map(char => {
+      const {
+        id,
+        name,
+        thumbnail
+      } = char;
       const imgClassName = classNames(
         'char__img',
         {'not-available': thumbnail.search(/image_not_available/) > 0}
       )
 
       return (
-        <li className="char__item" key={id}>
+        <li
+          key={id}
+          className="char__item"
+          onClick={() => onCharSelected(char)}
+        >
           <img className={imgClassName} src={thumbnail} alt={name}/>
           <div className="char__name">{name}</div>
         </li>

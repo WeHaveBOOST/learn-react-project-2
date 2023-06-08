@@ -4,7 +4,8 @@ function transformCharacter (obj) {
     name,
     description,
     thumbnail,
-    urls
+    urls,
+    comics,
   } = obj;
 
   return {
@@ -14,6 +15,7 @@ function transformCharacter (obj) {
     thumbnail: `${thumbnail.path}.${thumbnail.extension}`,
     homepage: urls[0].url,
     wiki: urls[1].url,
+    comics: comics.items,
   }
 }
 
