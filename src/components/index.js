@@ -9,6 +9,7 @@ import SingleComic from './singleComic/SingleComic';
 import Skeleton from './skeleton/Skeleton';
 import Spinner from './spinner/Spinner';
 import ErrorMessage from './errorMessage/ErrorMessage';
+import ErrorBoundary from './errorBoundary/ErrorBoundary';
 
 export {
   App,
@@ -22,4 +23,5 @@ export {
   Skeleton,
   Spinner,
   ErrorMessage,
+  ErrorBoundary,
 }

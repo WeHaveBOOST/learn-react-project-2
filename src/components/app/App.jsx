@@ -4,6 +4,7 @@ import {
   RandomChar,
   CharList,
   CharInfo,
+  ErrorBoundary,
  } from '../index';
 
 import decoration from '../../resources/img/vision.png';
@@ -13,14 +14,21 @@ class App extends Component {
     selectedChar: null,
   }
 
-  onCharSelected = (char) => {
+  shouldComponentUpdate(nextProps, nextState) {
     const {selectedChar} = this.state;
+    if (!selectedChar) return true;
 
-    if (!selectedChar || char.id !== selectedChar.id) {
-      this.setState({
-        selectedChar: char
-      })
-    }
+    const {id: nextId} = nextState.selectedChar;
+    const {id: prevId} = selectedChar;
+    if (nextId !== prevId) return true;
+
+    return false;
+  }
+
+  onCharSelected = (char) => {
+    this.setState({
+      selectedChar: char
+    })
   }
 
   render() {
@@ -30,9 +38,13 @@ class App extends Component {
       <div className="app">
           <AppHeader/>
           <main>
-              <RandomChar/>
+              <ErrorBoundary>
+                <RandomChar/>
+              </ErrorBoundary>
               <div className="char__content">
-                  <CharList onCharSelected={this.onCharSelected}/>
+                  <ErrorBoundary>
+                    <CharList onCharSelected={this.onCharSelected}/>
+                  </ErrorBoundary>
                   <CharInfo char={selectedChar}/>
               </div>
               <img className="bg-decoration" src={decoration} alt="vision"/>

@@ -14,7 +14,10 @@ class CharInfo extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.char?.id !== this.props.char?.id) {
+    const {id: prevId} = prevProps.char || {};
+    const {char: {id: nextId}} = this.props;
+
+    if (prevId !== nextId) {
       this.setState({
         loading: true
       })
