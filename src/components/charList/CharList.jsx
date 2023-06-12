@@ -10,36 +10,57 @@ import './charList.scss';
 class CharList extends Component {
   state = {
     chars: [],
-    loading: true,
-    error: false
+    loading: false,
+    error: false,
+    offset: 210,
+    charEnded: false,
   }
 
   componentDidMount() {
     this.loadChars();
+
+    window.addEventListener('scroll', this.getEndOfpage);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.getEndOfpage);
   }
 
   loadChars = () => {
-    const {loading} = this.state;
+    const {
+      loading,
+      offset,
+    } = this.state;
 
-    if (!loading) {
-      this.setState({
-        loading: true,
-        error: false
-      })
-    }
+    if (loading) return;
 
-    fetch(`${process.env.SERVER_BASE}getAllCharacters/`)
+    this.setState({
+      loading: true,
+      error: false
+    })
+
+    fetch(`${process.env.SERVER_BASE}getAllCharacters/?offset=${offset}`)
       .then(result => result.json())
       .then(this.onCharsLoaded)
       .catch(this.onError)
   }
 
-  onCharsLoaded = (arr) => {
-    this.setState({
-      chars: arr,
+  onCharsLoaded = (newChars) => {
+    const ended = newChars.length < 9;
+
+    this.setState(({chars, offset}) => ({
+      chars: [...chars, ...newChars],
       loading: false,
-      error: false
-    })
+      error: false,
+      offset: offset + 9,
+      charEnded: ended,
+    }))
+  }
+
+  getEndOfpage = () => {
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight) {
+      this.loadChars();
+    }
   }
 
   onError = (err) => {
@@ -51,54 +72,76 @@ class CharList extends Component {
 
   render() {
     const {
+      onCharSelected,
+      selectedChar
+    } = this.props;
+    const {
       chars,
       loading,
       error,
+      charEnded
     } = this.state;
-    const {onCharSelected} = this.props;
 
     const spinner = loading ? <Spinner/> : null;
     const errorMessage = error ? <ErrorMessage/> : null;
-    const content = !(error || loading) ? <View chars={chars} onCharSelected={onCharSelected} /> : null;
+    const content = !error ?
+      <View
+        chars={chars}
+        onCharSelected={onCharSelected}
+        selectedChar={selectedChar}
+      /> :
+      null;
 
     return (
       <div className="char__list">
-          {spinner}
-          {errorMessage}
-          {content}
-          <button
-            className="button button__main button__long"
-            type="button"
-            disabled={loading}
-          >
-              <div className="inner">load more</div>
-          </button>
+        {errorMessage}
+        {content}
+        {spinner}
+        <button
+          className='button button__main button__long'
+          type="button"
+          disabled={loading}
+          hidden={charEnded}
+          onClick={this.loadChars}
+        >
+          <div className="inner">load more</div>
+        </button>
       </div>
     )
   }
 }
 
-const View = ({chars, onCharSelected}) => (
+const View = ({chars, onCharSelected, selectedChar}) => (
   <ul className="char__grid">
     {chars.map(char => {
       const {
         id,
         name,
-        thumbnail
+        thumbnail,
       } = char;
+
+      const liClassName = classNames(
+        'char__item',
+        {'char__item_selected': selectedChar && id === selectedChar.id}
+      );
+
       const imgClassName = classNames(
         'char__img',
         {'not-available': thumbnail.search(/image_not_available/) > 0}
-      )
+      );
 
       return (
         <li
           key={id}
-          className="char__item"
-          onClick={() => onCharSelected(char)}
+          className={liClassName}
         >
-          <img className={imgClassName} src={thumbnail} alt={name}/>
-          <div className="char__name">{name}</div>
+          <button
+            type='button'
+            onClick={() => onCharSelected(char)}
+          >
+            <span className="char__name">{name}</span>
+            <img className={imgClassName} src={thumbnail} alt={name}/>
+          </button>
         </li>
       )
     })}

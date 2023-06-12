@@ -16,6 +16,10 @@
     opacity: 0.75;
   }
 
+  &[hidden] {
+    display: none;
+  }
+
   &__long {
     display: block;
     width: 170px;

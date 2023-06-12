@@ -43,7 +43,7 @@ class App extends Component {
               </ErrorBoundary>
               <div className="char__content">
                   <ErrorBoundary>
-                    <CharList onCharSelected={this.onCharSelected}/>
+                    <CharList onCharSelected={this.onCharSelected} selectedChar={selectedChar}/>
                   </ErrorBoundary>
                   <CharInfo char={selectedChar}/>
               </div>

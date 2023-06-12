@@ -27,9 +27,10 @@ app.get('/', (req, res) => {
 });
 
 app.get('/getAllCharacters', (req, res, next) => {
+  const {offset} = req.query;
   const parameters = [
     'limit=9&',
-    'offset=210&',
+    `offset=${offset}&`,
     ...defaultParameters
   ].join('');
 
